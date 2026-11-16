@@ -50,7 +50,7 @@ export function Room() {
   const [thought, setThought] = useState(0);
   const note = thoughts[thought];
   useEffect(() => { document.title = '森林的房间 · 给好奇心留一盏灯'; }, []);
-  return <div className="forest-room">
+  return <div className="forest-room" id="home">
     <a className="fr-skip" href="#room-main">跳到正文</a>
     <nav className="fr-nav" aria-label="房间导航"><a className="fr-brand" href="#home"><span className="fr-mark">✳︎</span> 森林的房间</a><div><a href="#room-notes">窗边札记</a><a href="#room-doorways">随便走走</a><a className="fr-shelf-link" href="#room-experiment">玩一下 ↘</a></div></nav>
     <main id="room-main">
