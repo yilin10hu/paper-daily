@@ -9,11 +9,12 @@ const thoughts = [
 ];
 
 function Viewfinder() {
-  const [angle, setAngle] = useState(24);
-  const shift = angle * 0.7;
+  const [offset, setOffset] = useState(24);
+  const shift = offset * 0.7;
+  const positionText = offset === 0 ? '居中' : `向${offset < 0 ? '左' : '右'}偏移 ${Math.abs(offset)} 个示意刻度`;
   return <div className="fr-viewfinder" id="room-experiment">
     <div className="fr-view-meta"><span>EXPERIMENT 001</span><span>视角之窗</span></div>
-    <svg viewBox="0 0 600 480" role="img" aria-label={`视差几何示意，相机偏转 ${angle} 度`}>
+    <svg viewBox="0 0 600 480" role="img" aria-label={`视差交互示意，${positionText}，不代表真实相机投影`}>
       <defs>
         <radialGradient id="room-glow"><stop stopColor="#b6cba2" stopOpacity=".35"/><stop offset="1" stopColor="#b6cba2" stopOpacity="0"/></radialGradient>
         <linearGradient id="room-slab" x2="1" y2="1"><stop stopColor="#ced7ad"/><stop offset="1" stopColor="#6c8473"/></linearGradient>
@@ -37,12 +38,12 @@ function Viewfinder() {
       <g transform={`translate(${shift * -1.3} 0)`}>
         <path d="M415 259L455 334 375 334Z" fill="#c6d099"/><path d="M415 259L415 334 455 334Z" fill="#8aab85"/>
       </g>
-      <path d={`M${300 + angle * 3} 407L${275 + angle} 338M${300 + angle * 3} 407L${355 + angle} 330`} fill="none" stroke="#edb486" strokeOpacity=".7"/>
-      <g transform={`translate(${300 + angle * 3} 407)`}><rect x="-12" y="-8" width="24" height="16" rx="3" fill="#edb486"/><path d="M-6 -8L-3 -12H5L8 -8" stroke="#edb486" fill="none"/></g>
+      <path d={`M${300 + offset * 3} 407L${275 + offset} 338M${300 + offset * 3} 407L${355 + offset} 330`} fill="none" stroke="#edb486" strokeOpacity=".7"/>
+      <g transform={`translate(${300 + offset * 3} 407)`}><rect x="-12" y="-8" width="24" height="16" rx="3" fill="#edb486"/><path d="M-6 -8L-3 -12H5L8 -8" stroke="#edb486" fill="none"/></g>
       <text x="30" y="455" fill="#829c89" fontSize="10" fontFamily="monospace">SAME WORLD / ANOTHER VIEW</text>
     </svg>
-    <div className="fr-slider"><label htmlFor="view-angle">移动视点 <span>{angle > 0 ? '+' : ''}{angle}°</span></label><input id="view-angle" aria-label="移动视点" type="range" min="-40" max="40" value={angle} onChange={e => setAngle(Number(e.target.value))}/></div>
-    <p className="fr-demo-note">拖动试试。原创视差小实验，不是真实 3D 渲染或模型输出。</p>
+    <div className="fr-slider"><label htmlFor="view-offset">移动视点 <span>{offset > 0 ? '+' : ''}{offset}（示意）</span></label><input id="view-offset" aria-label="移动视点" aria-valuetext={positionText} aria-describedby="view-note" type="range" min="-40" max="40" value={offset} onChange={e => setOffset(Number(e.target.value))}/></div>
+    <p className="fr-demo-note" id="view-note">拖动或用方向键试试。原创视差小实验，不是真实 3D 渲染或模型输出。</p>
   </div>;
 }
 
