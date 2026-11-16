@@ -4,6 +4,7 @@ import { ArrowRight, ExternalLink, Code, Star, Quote, Building2 } from 'lucide-r
 import type { DataBundle, Paper } from '../../types/data';
 import { groupPapers, humanDate, type Group } from '../../utils/groups';
 import { allPapers } from '../../utils/helpers';
+import { useReadingQueue, paperKey } from '../../hooks/useReadingQueue';
 
 const SUMMARY_MAX = 60;
 
@@ -47,9 +48,13 @@ function PaperCard({
   n,
   color,
   onRead,
+  saved,
+  onSave,
 }: {
   p: Paper;
   n: number;
+  saved: boolean;
+  onSave: () => void;
   color: string;
   onRead: () => void;
 }) {
@@ -79,7 +84,8 @@ function PaperCard({
 
       <MetaRow p={p} />
 
-      <div className="mt-auto flex items-center gap-3 pt-3">
+      <div className="mt-auto flex flex-wrap items-center gap-3 pt-3">
+        <button onClick={onSave} aria-pressed={saved} className="pd-oc-link">{saved ? '已加入待读 ✓' : '+ 稍后读'}</button>
         <button onClick={onRead} className="pd-oc-go">
           精读 <ArrowRight className="size-3.5" aria-hidden />
         </button>
@@ -119,14 +125,25 @@ export function Overview({
   onRead: (paperIndex: number) => void;
 }) {
   const papers = allPapers(data);
-  const groups: Group[] = groupPapers(papers);
+  const { saved, toggle, persistent } = useReadingQueue();
+  const [query, setQuery] = useState('');
+  const [queueOnly, setQueueOnly] = useState(false);
+  const groups: Group[] = groupPapers(papers).map(group => ({
+    ...group,
+    items: group.items.filter(({ paper }) => {
+      const haystack = [paper.title, paper.titleZh, paper.authors, paper.category, paper.hook, paper.summary].filter(Boolean).join(' ').toLocaleLowerCase();
+      return (!queueOnly || saved.includes(paperKey(paper))) && query.trim().toLocaleLowerCase().split(/\s+/).every(word => haystack.includes(word));
+    }),
+  }));
+  const matched = groups.reduce((sum, group) => sum + group.items.length, 0);
   const ids = groups.map(g => 'sec-' + g.def.key);
+  const sectionIds = ids.join(',');
   const [active, setActive] = useState(ids[0]);
   const mainRef = useRef<HTMLElement | null>(null);
 
   /* 滚动高亮：取当前视口中最靠上的可见分组 */
   useEffect(() => {
-    const secs = ids
+    const secs = sectionIds.split(',')
       .map(id => document.getElementById(id))
       .filter((el): el is HTMLElement => Boolean(el));
     if (!secs.length) return;
@@ -141,7 +158,7 @@ export function Overview({
     );
     secs.forEach(s => io.observe(s));
     return () => io.disconnect();
-  }, [ids.join(',')]);
+  }, [sectionIds]);
 
   const total = papers.length;
   const heroDate = humanDate(data.date);
@@ -207,6 +224,19 @@ export function Overview({
         </div>
       </nav>
 
+      <section aria-label="阅读工作台" className="mx-auto max-w-[1180px] px-5 pt-6">
+        <div className="rounded-xl border border-paper-line bg-paper-card p-4">
+          <h2 className="font-display text-lg font-bold text-paper-ink">留一点时间，给真正想读的论文。</h2>
+          <p className="mt-1 text-xs text-paper-muted">待读仅保存在当前浏览器，不上传、不自动同步。{!persistent && '当前无法保存到浏览器，关闭页面后将丢失。'}</p>
+          <div className="mt-4 flex flex-wrap items-center gap-3">
+            <input type="search" aria-label="搜索本期论文" placeholder="搜索标题、作者或关键词…" value={query} onChange={e => setQuery(e.target.value)} className="min-h-11 min-w-0 flex-1 rounded-lg border border-paper-line bg-paper-50 px-3 text-sm text-paper-ink" />
+            <button aria-pressed={queueOnly} onClick={() => setQueueOnly(v => !v)} className="min-h-11 rounded-lg border border-paper-line px-3 text-sm text-paper-ink">{queueOnly ? '✓ ' : ''}本期待读 ({papers.filter(p => saved.includes(paperKey(p))).length})</button>
+            {(query || queueOnly) && <button onClick={() => { setQuery(''); setQueueOnly(false); }} className="min-h-11 text-sm text-paper-muted">重置</button>}
+          </div>
+          <p role="status" className="mt-2 text-xs text-paper-muted">找到 {matched} / {papers.length} 篇{matched === 0 ? '，试试其他关键词，或切回全部论文。' : ''}</p>
+        </div>
+      </section>
+
       {/* ---------- 正文：分组卡片网格 ---------- */}
       <main ref={mainRef} className="mx-auto max-w-[1180px] px-5 pt-7 pb-2">
         {groups.map(g => (
@@ -224,6 +254,8 @@ export function Overview({
                   <PaperCard
                     key={it.index}
                     p={it.paper}
+                    saved={saved.includes(paperKey(it.paper))}
+                    onSave={() => toggle(it.paper)}
                     n={it.n}
                     color={g.def.colorVar}
                     onRead={() => onRead(it.index)}
