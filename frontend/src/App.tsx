@@ -20,6 +20,21 @@ import { useTheme } from './hooks/useTheme';
 
 export function App({ data }: { data: DataBundle }) {
   const papers = allPapers(data);
+  if (data.empty || papers.length === 0) {
+    return (
+      <div className="min-h-dvh bg-paper-50 font-sans">
+        <TopBar meta="" />
+        <EmptyState reason={data.reason} />
+        <Colophon axes={data.axes || '三维重建 × 世界模型'} count={0} date={data.date || ''} />
+      </div>
+    );
+  }
+
+  return <Reader data={data} />;
+}
+
+function Reader({ data }: { data: DataBundle }) {
+  const papers = allPapers(data);
   const { show, node: toastNode } = useToast();
   const { toggle: toggleTheme } = useTheme();
   const [helpOpen, setHelpOpen] = useState(false);
@@ -44,16 +59,6 @@ export function App({ data }: { data: DataBundle }) {
   // 顶栏只留方向名（期号/日期已在 Hero 展示，避免小字重复）
   const meta = data.axes || '稀疏视角 4DGS · 新视角合成';
   const issue = data.issue || '';
-
-  if (data.empty || papers.length === 0) {
-    return (
-      <div className="min-h-dvh bg-paper-50 font-sans">
-        <TopBar meta="" />
-        <EmptyState reason={data.reason} />
-        <Colophon axes={data.axes || '三维重建 × 世界模型'} count={0} date={data.date || ''} />
-      </div>
-    );
-  }
 
   // 由扁平索引定位论文与卡
   let paperIdx = 0;
