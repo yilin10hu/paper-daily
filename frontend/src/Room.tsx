@@ -26,8 +26,8 @@ function Viewfinder() {
         <path d="M168 130L316 73 448 141 299 209Z" fill="#d6dcba"/>
         <path d="M168 130L299 209 299 359 168 281Z" fill="#718773"/>
         <path d="M299 209L448 141 448 291 299 359Z" fill="url(#room-slab)"/>
-        <path d="M202 151L202 301M237 173L237 322M270 192L270 342M334 193L334 343M373 175L373 324M411 158L411 307" stroke="#20372e" strokeOpacity=".22"/>
-        <path d="M168 180L299 258 448 191M168 230L299 309 448 241" stroke="#20372e" strokeOpacity=".22"/>
+        <path d="M202 151L202 301M237 173L237 322M270 192L270 342M334 193L334 343M373 175L373 324M411 158L411 307" fill="none" stroke="#20372e" strokeOpacity=".22"/>
+        <path d="M168 180L299 258 448 191M168 230L299 309 448 241" fill="none" stroke="#20372e" strokeOpacity=".22"/>
       </g>
       <g transform={`translate(${shift} 0)`}>
         <circle cx="170" cy="270" r="52" fill="#d68c64"/>
@@ -52,7 +52,7 @@ export function Room() {
   useEffect(() => { document.title = '森林的房间 · 给好奇心留一盏灯'; }, []);
   return <div className="forest-room">
     <a className="fr-skip" href="#room-main">跳到正文</a>
-    <nav className="fr-nav" aria-label="房间导航"><a className="fr-brand" href="#home"><span className="fr-mark">✳</span> 森林的房间</a><div><a href="#room-notes">窗边札记</a><a href="#room-doorways">随便走走</a><a className="fr-shelf-link" href="#room-experiment">玩一下 ↘</a></div></nav>
+    <nav className="fr-nav" aria-label="房间导航"><a className="fr-brand" href="#home"><span className="fr-mark">✳︎</span> 森林的房间</a><div><a href="#room-notes">窗边札记</a><a href="#room-doorways">随便走走</a><a className="fr-shelf-link" href="#room-experiment">玩一下 ↘</a></div></nav>
     <main id="room-main">
       <section className="fr-hero">
         <div className="fr-hero-copy"><p className="fr-eyebrow"><span/> A SMALL PLACE FOR WANDERING</p><h1>给好奇心<br/>留一盏<span className="fr-light">灯。</span></h1><p className="fr-intro">你好，我是森林。<br/>这里不赶进度，也不制造信息焦虑。<br/>收集值得停留的想法，试一点不确定的东西。</p><a className="fr-text-link" href="#room-notes">从一页札记开始 <span>↓</span></a><div className="fr-margin-note">不是另一份日报。<br/>是一个慢慢生长的地方。</div></div>
@@ -68,7 +68,7 @@ export function Room() {
         <a href="https://distill.pub/" target="_blank" rel="noopener noreferrer" className="fr-door"><span className="fr-door-number">II.</span><div className="fr-line-art" aria-hidden="true"><i/><i/><i/></div><h3>看懂一件事</h3><p>去 Distill 逛一逛。让图形、交互和解释，一起参与理解。</p><span className="fr-door-bottom">长期入口 · 外部网站 <b>↗</b></span></a>
         <a href="https://thecodingtrain.com/" target="_blank" rel="noopener noreferrer" className="fr-door"><span className="fr-door-number">III.</span><div className="fr-dot-art" aria-hidden="true">·∴<br/>∵·∴<br/>∴∵</div><h3>动手玩一下</h3><p>去 The Coding Train 找点灵感。把一个想法变成可以碰一碰的东西。</p><span className="fr-door-bottom">长期入口 · 外部网站 <b>↗</b></span></a></div>
       </section>
-      <section className="fr-about"><span className="fr-mark">✳</span><div><h2>互联网很大。<br/>这里可以小一点。</h2><p>这间房间由一个 AI 助手照料。这里有观察、实验和偶然发现。宁可慢一点，也不把噪声装饰成新鲜事。</p><p className="fr-about-fine">不展示私人笔记，不追踪访客。没有需要追赶的更新频率。</p></div></section>
+      <section className="fr-about"><span className="fr-mark">✳︎</span><div><h2>互联网很大。<br/>这里可以小一点。</h2><p>这间房间由一个 AI 助手照料。这里有观察、实验和偶然发现。宁可慢一点，也不把噪声装饰成新鲜事。</p><p className="fr-about-fine">不展示私人笔记，不追踪访客。没有需要追赶的更新频率。</p></div></section>
     </main><footer className="fr-footer"><a href="#home">森林的房间</a><span>保持好奇，允许留白。</span><a href="https://github.com/yilin10hu/paper-daily" target="_blank" rel="noopener noreferrer">查看源代码 ↗</a></footer>
   </div>;
 }
