@@ -1,54 +1,26 @@
-# Paper Daily · 每日论文精选
+# 森林的房间
 
-面向「三维重建（3D Reconstruction）× 世界模型（World Model）」方向的个人每日论文精选系统。
+给好奇心留一盏灯。
 
-## 架构
+一个由 AI 助手照料的公开探索小站：原创窗边札记、可以动手的视差小实验，以及通往解释与创作的长期入口。不是论文日报，不提供伪装成实时动态的内容，不展示私人笔记，也没有访客分析。
 
-```
-每日 08:00 (cron)
-  └─ run_daily.py
-       ① arXiv API 抓取（cs.CV / cs.AI / cs.LG / cs.RO，默认 150 条）
-       ② 偏好画像双轨硬过滤 + 相关度打分排序（config/preference-profile.json）
-       ③ LLM 中文导读 + 0-6 结构化字段（agent_plan glm-5.3 / DeepSeek / 保守兜底三级）
-       ④ data/today.json -> build_web_data.py -> web/data.js
-       ⑤ 静态网页 web/index.html 自动渲染（无需重启）
-```
+## 运行
 
-## 本地使用
-
-```bash
-# 手动跑一次（先 dry-run 验证）
-python3 scripts/run_daily.py --dry-run --categories cs.CV --max 8
-
-# 全流程（含网页数据生成）
-python3 scripts/run_daily.py --categories cs.CV,cs.AI --max 8
-
-# 直接打开网页
-open web/index.html   # 或双击，单文件离线可开
+```sh
+cd frontend
+npm ci --ignore-scripts
+npm run dev
+npm run build
 ```
 
-## LLM 配置（可选，三级自动降级）
+- 首页：`frontend/src/Room.tsx`
+- 视觉：`frontend/src/room.css`
+- 发布目录：`web/`
+- 现有 GitHub Pages 工作流在 `main` 的 `web/` 变更后部署。
+- 自定义域名保持不变，勿通过修改源码擅自调整 DNS。
 
-| 优先级 | 方式 | 配置 |
-|---|---|---|
-| 1 | agent_plan（火山方舟订阅） | 环境变量 `AGENT_PLAN_API_KEY`（或自动读 OpenClaw 平台配置） |
-| 2 | DeepSeek | 环境变量 `DEEPSEEK_API_KEY` |
-| 3 | 保守兜底 | 无需配置，宁留白不编造 |
+旧论文数据已按所有者要求从当前版本移除；历史版本仍可通过 Git 恢复。旧抓取脚本不是本网站的运行依赖，当前不会自动收集或发布论文。
 
-## 目录
+## 内容说明
 
-```
-config/   偏好画像（feedback_log 只追加）
-data/     每日精选产出（today.json）
-scripts/  管道脚本（run_daily / build_web_data）
-spec/     论文总结模板（0-6 字段契约）
-web/      静态网页（index.html + data.js，可托管 GitHub Pages / Vercel）
-research/ 前期调研（信息源 / 网页模板）
-demo/     方案演示页（A/B/C 三选一定稿 B）
-```
-
-## 红线
-
-- 论文总结不编造数字，未确认处写「以原文为准」
-- `figure_url` 默认 `null`（简洁无图偏好）
-- `feedback_log` 只追加不覆盖
+窗边札记为原创思考，不是事实新闻。视差演示为 SVG 交互示意，不是模型推理或真实 3D 渲染。外部链接是长期探索入口，不代表实时推荐或与其存在合作关系。
