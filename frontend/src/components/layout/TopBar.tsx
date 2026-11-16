@@ -1,4 +1,4 @@
-import { Moon, Sun, Newspaper, LayoutGrid, BookOpen } from 'lucide-react';
+import { Moon, Sun, LayoutGrid, BookOpen } from 'lucide-react';
 import { useTheme } from '../../hooks/useTheme';
 
 export type ViewMode = 'overview' | 'read';
@@ -21,9 +21,9 @@ export function TopBar({
   return (
     <header className="sticky top-0 z-50 border-b border-paper-line bg-paper-50/90 px-5 py-3 backdrop-blur">
       <div className={`mx-auto flex ${box} items-center gap-3`}>
-        <Newspaper className="size-4 shrink-0 text-paper-accent" aria-hidden />
+        <a href="#home" aria-label="回到森林的房间" className="text-paper-accent text-xl">✳</a>
         <span className="font-display text-[17px] font-bold tracking-tight text-paper-ink">
-          Paper<span className="text-paper-accent">卡片</span>
+          森林<span className="text-paper-accent">的书架</span>
         </span>
         <span className="hidden truncate text-xs text-paper-muted sm:inline">{meta}</span>
         {issue && (

@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import { Room } from './Room';
 import { Copy, Share2, Keyboard, ArrowLeft } from 'lucide-react';
 import type { DataBundle } from './types/data';
 import { allPapers, buildCopyText, copyToClipboard, saveFeedback, sharePaper, canShare } from './utils/helpers';
@@ -19,6 +20,17 @@ import { useToast } from './hooks/useToast';
 import { useTheme } from './hooks/useTheme';
 
 export function App({ data }: { data: DataBundle }) {
+  const [hash, setHash] = useState(window.location.hash);
+  useEffect(() => {
+    const update = () => setHash(window.location.hash);
+    window.addEventListener('hashchange', update);
+    return () => window.removeEventListener('hashchange', update);
+  }, []);
+  const library = /^#(library|read|sec-)/.test(hash);
+  return library ? <PaperLibrary data={data} /> : <Room />;
+}
+
+function PaperLibrary({ data }: { data: DataBundle }) {
   const papers = allPapers(data);
   if (data.empty || papers.length === 0) {
     return (
@@ -94,7 +106,7 @@ function Reader({ data }: { data: DataBundle }) {
 
   const goOverview = useCallback(() => {
     setView('overview');
-    history.replaceState(null, '', window.location.pathname + window.location.search);
+    history.replaceState(null, '', '#library');
     window.scrollTo({ top: 0, behavior: 'auto' });
   }, []);
 
@@ -102,7 +114,7 @@ function Reader({ data }: { data: DataBundle }) {
   useEffect(() => {
     const cur = papers[paperIdx];
     const name = cur ? (cur.titleZh || cur.title) : '';
-    document.title = `Paper卡片 · ${data.axes || '三维重建 × 世界模型'}${name ? ` · ${name.slice(0, 30)}` : ''}`;
+    document.title = `森林的书架 · ${data.axes || '三维重建 × 世界模型'}${name ? ` · ${name.slice(0, 30)}` : ''}`;
   }, [paperIdx, papers, data.axes]);
 
   // 深链同步：#read/<n> 跟随当前论文，便于分享单篇
