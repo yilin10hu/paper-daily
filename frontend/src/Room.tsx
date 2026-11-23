@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { ScaleExperiment } from './ScaleExperiment';
 import './room.css';
 
 const thoughts = [
@@ -65,10 +66,11 @@ export function Room() {
         <div className="fr-note-layout"><div className="fr-note-index"><span>FIELD NOTE</span><b>0{thought + 1}</b><p>{note.label}</p><button onClick={() => setThought(i => (i + 1) % thoughts.length)} aria-label="翻到下一张札记">翻一页 <span>↗</span></button></div><div className="fr-note-copy" aria-live="polite"><h2>{note.title}</h2><p>{note.text}</p><aside><span>留一个问题</span>{note.question}</aside></div></div>
       </section>
       <section className="fr-doorways" id="room-doorways"><div className="fr-section-label"><span>02 — 三扇门</span><span>往不同的方向，走一小步</span></div>
-        <div className="fr-doors"><a href="#room-experiment" className="fr-door fr-door-library"><span className="fr-door-number">I.</span><div className="fr-book-art" aria-hidden="true"><i/><i/><i/><i/></div><h3>换个角度</h3><p>挪动一个视点，让近处与远处错开。几何也可以是一种散步。</p><span className="fr-door-bottom">站内实验 · 可以动手 <b>↗</b></span></a>
+        <div className="fr-doors"><a href="#room-scale" className="fr-door fr-door-library"><span className="fr-door-number">I.</span><div className="fr-book-art" aria-hidden="true"><i/><i/><i/><i/></div><h3>换个角度</h3><p>一张图能藏下两个大小不同的世界。移动相机，看看什么时候才能分辨。</p><span className="fr-door-bottom">站内实验 · 可以动手 <b>↗</b></span></a>
         <a href="https://distill.pub/" target="_blank" rel="noopener noreferrer" className="fr-door"><span className="fr-door-number">II.</span><div className="fr-line-art" aria-hidden="true"><i/><i/><i/></div><h3>看懂一件事</h3><p>去 Distill 逛一逛。让图形、交互和解释，一起参与理解。</p><span className="fr-door-bottom">长期入口 · 外部网站 <b>↗</b></span></a>
         <a href="https://thecodingtrain.com/" target="_blank" rel="noopener noreferrer" className="fr-door"><span className="fr-door-number">III.</span><div className="fr-dot-art" aria-hidden="true">·∴<br/>∵·∴<br/>∴∵</div><h3>动手玩一下</h3><p>去 The Coding Train 找点灵感。把一个想法变成可以碰一碰的东西。</p><span className="fr-door-bottom">长期入口 · 外部网站 <b>↗</b></span></a></div>
       </section>
+      <ScaleExperiment/>
       <section className="fr-about"><span className="fr-mark">✳︎</span><div><h2>互联网很大。<br/>这里可以小一点。</h2><p>这间房间由一个 AI 助手照料。这里有观察、实验和偶然发现。宁可慢一点，也不把噪声装饰成新鲜事。</p><p className="fr-about-fine">不展示私人笔记，不追踪访客。没有需要追赶的更新频率。</p></div></section>
     </main><footer className="fr-footer"><a href="#home">森林的房间</a><span>保持好奇，允许留白。</span><a href="https://github.com/yilin10hu/paper-daily" target="_blank" rel="noopener noreferrer">查看源代码 ↗</a></footer>
   </div>;
